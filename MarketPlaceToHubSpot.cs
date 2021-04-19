@@ -28,8 +28,10 @@ namespace evalan_hubspot
 				
 	    //string hubspotAPIKey = config["hubspotAPIKEY"];
         string baseURI = "https://api.hubapi.com/crm/v3/objects/contacts?limit=10&archived=false&hapikey=";
+        HttpClient newClient = new HttpClient();
 
         log.LogInformation("Processing lead");
+        
 
 
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
