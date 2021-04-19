@@ -7,7 +7,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration; 
+using Microsoft.Extensions.Configuration;
+using System.Net.Http;
 
 namespace evalan_hubspot
 {
@@ -26,16 +27,19 @@ namespace evalan_hubspot
 	    .Build();
 				
 	    //string hubspotAPIKey = config["hubspotAPIKEY"];
+        string baseURI = "https://api.hubapi.com/crm/v3/objects/contacts?limit=10&archived=false&hapikey=";
+
         log.LogInformation("Processing lead");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            // debug
-            log.LogInformation(requestBody);
 
-            string responseMessage = "Function was triggered";
+        string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+        dynamic data = JsonConvert.DeserializeObject(requestBody);
+        // debug
+        log.LogInformation(requestBody);
 
-            return new OkObjectResult(responseMessage);
+        string responseMessage = "Function was triggered";
+
+        return new OkObjectResult(responseMessage);
         }
     }
 }
