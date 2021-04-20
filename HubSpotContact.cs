@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace marketplacetohubspotleads
+namespace marketplaceleadstohubspot 
 {
         public class Property
     {

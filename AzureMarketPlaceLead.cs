@@ -1,4 +1,4 @@
-namespace marketplacetohubspotleads
+namespace marketplaceleadstohubspot
 {
     // Lead deserializedMarketplaceLead = JsonConvert.DeserializeObject<Lead>(myJsonResponse); 
     public class UserDetails
