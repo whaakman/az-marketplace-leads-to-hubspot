@@ -57,7 +57,7 @@ namespace marketplaceleadstohubspot
             new Property { property = "lead_source", value = "Microsoft.com Referral"},
             new Property { property = "message", value = "Offer Title: " + deserializedMarketplaceLead.offerTitle }
         };
-        // Serial details to jsonBody
+        // Serialize details to jsonBody
         string jsonBody = JsonConvert.SerializeObject(details);
 
 
