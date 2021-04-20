@@ -25,20 +25,34 @@ namespace evalan_hubspot
 	    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
 	    .AddEnvironmentVariables() 
 	    .Build();
-				
-	    //string hubspotAPIKey = config["hubspotAPIKEY"];
-        string baseURI = "https://api.hubapi.com/crm/v3/objects/contacts?limit=10&archived=false&hapikey=";
-        HttpClient newClient = new HttpClient();
 
         log.LogInformation("Processing lead");
-        
+	
+        // Hubspot API information
+	    string hubspotAPIKey = config["hubspotAPIKEY"];
+        string baseURI = "https://api.hubapi.com/crm/v3/objects/contacts?limit=10&archived=false&hapikey=";
+        string URI = baseURI + hubspotAPIKey;
 
+        // Debug
+        log.LogInformation(URI);
+        
+        // Create HTTP client
+        HttpClient httpClient = new HttpClient();
+        HttpResponseMessage response = await httpClient.GetAsync(URI);
+        response.EnsureSuccessStatusCode();
+        string responseBody = await response.Content.ReadAsStringAsync();
+
+        
+        
 
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
         dynamic data = JsonConvert.DeserializeObject(requestBody);
         // debug
         log.LogInformation(requestBody);
 
+        log.LogInformation(responseBody);
+
+        // Marketplace can only deal with HTTP status codes. Message doesn't matter
         string responseMessage = "Function was triggered";
 
         return new OkObjectResult(responseMessage);
