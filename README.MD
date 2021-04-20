@@ -1,5 +1,5 @@
 # HTTPS Endpoint for Azure Marketplace Leads to HubSpot
-This Azure Function accepts leads from Azure Marketplace and passes them to HubSpot.
+This Azure Function accepts leads from Azure Marketplace and passes them to HubSpot. This creates a contact in HubSpot. Depending ont he HubSpot features you have available you could write them somewhere else. You can use the same code as below but you need to modify the call to the HubSpot API.
 
 ## Requirements
 - Azure Function App
