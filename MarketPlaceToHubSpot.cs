@@ -88,8 +88,6 @@ namespace marketplaceleadstohubspot
         // Marketplace can only deal with HTTP status codes. Message doesn't matter
         string responseMessage = "Function was triggered";
         
-        // debug
-        log.LogInformation(result);
         return new OkObjectResult(responseMessage);
         }
     }
