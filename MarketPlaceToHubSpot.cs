@@ -38,25 +38,23 @@ namespace evalan_hubspot
         
         // Method: process body from marketplace
 
-        // Method: Create HTTP client
-      /*   public static async Task<HttpClient> HTTPClient()
+        // Create HTTP client
+        static HttpClient HTTPClient()
         {
-            // Get the access token
-            var token = await APICall.GetToken();
-            // Creat the HTTP Client
-            var httpClient = new HttpClient();
-
-            // Create the Headers
-            httpClient.DefaultRequestHeaders.Remove("Authorization");
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-
+            HttpClient httpClient = new HttpClient();
             return httpClient;
+        }
 
-        } */
-        HttpClient httpClient = new HttpClient();
-        HttpResponseMessage response = await httpClient.GetAsync(URI);
-        response.EnsureSuccessStatusCode();
-        string responseBody = await response.Content.ReadAsStringAsync();
+        static async Task<string> WriteLeadHubSpot(string URI)
+        {
+            HttpClient httpClient = HTTPClient();
+            HttpResponseMessage response = await httpClient.GetAsync(URI);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+            return responseBody;
+        }
+
+        string result = await WriteLeadHubSpot(URI);
 
         
         // Method: Write to Hubspot
@@ -66,7 +64,7 @@ namespace evalan_hubspot
         // debug
         log.LogInformation(requestBody);
 
-        log.LogInformation(responseBody);
+        log.LogInformation(result);
 
         // Marketplace can only deal with HTTP status codes. Message doesn't matter
         string responseMessage = "Function was triggered";
