@@ -36,14 +36,30 @@ namespace evalan_hubspot
         // Debug
         log.LogInformation(URI);
         
-        // Create HTTP client
+        // Method: process body from marketplace
+
+        // Method: Create HTTP client
+      /*   public static async Task<HttpClient> HTTPClient()
+        {
+            // Get the access token
+            var token = await APICall.GetToken();
+            // Creat the HTTP Client
+            var httpClient = new HttpClient();
+
+            // Create the Headers
+            httpClient.DefaultRequestHeaders.Remove("Authorization");
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+
+            return httpClient;
+
+        } */
         HttpClient httpClient = new HttpClient();
         HttpResponseMessage response = await httpClient.GetAsync(URI);
         response.EnsureSuccessStatusCode();
         string responseBody = await response.Content.ReadAsStringAsync();
 
         
-        
+        // Method: Write to Hubspot
 
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
         dynamic data = JsonConvert.DeserializeObject(requestBody);
