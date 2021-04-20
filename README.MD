@@ -34,8 +34,8 @@ var details = new HubSpotContactPoperties();
             new Property { property = "lead_source", value = "Microsoft.com Referral"},
             new Property { property = "message", value = "Offer Title: " + deserializedMarketplaceLead.offerTitle }
         };
-        // Serialize details to jsonBody
-        string jsonBody = JsonConvert.SerializeObject(details);
+// Serialize details to jsonBody
+string jsonBody = JsonConvert.SerializeObject(details);
 ```` 
 
 
