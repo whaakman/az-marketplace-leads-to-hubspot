@@ -60,7 +60,8 @@ namespace marketplaceleadstohubspot
         // Serialize details to jsonBody
         string jsonBody = JsonConvert.SerializeObject(details);
 
-
+        // Write Leads to HubSpot
+        string result = await WriteLeadHubSpot(URI, jsonBody);
 
         // Methods for HTTP Client, and posting to HubSpot
         // Create HTTP client
@@ -82,8 +83,6 @@ namespace marketplaceleadstohubspot
             string responseBody = await response.Content.ReadAsStringAsync();
             return responseBody;
         }
-
-        string result = await WriteLeadHubSpot(URI, jsonBody);
 
         // Marketplace can only deal with HTTP status codes. Message doesn't matter
         string responseMessage = "Function was triggered";
