@@ -1,4 +1,4 @@
-namespace evalan_hubspot
+namespace marketplacetohubspotleads
 {
     // Lead deserializedMarketplaceLead = JsonConvert.DeserializeObject<Lead>(myJsonResponse); 
     public class UserDetails

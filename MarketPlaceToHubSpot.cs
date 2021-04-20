@@ -10,8 +10,9 @@ using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using System.Collections.Generic;
+using System.Text;
 
-namespace evalan_hubspot
+namespace marketplacetohubspotleads
 {
     public static class MarketPlaceToHubSpot
     {
@@ -26,21 +27,20 @@ namespace evalan_hubspot
 	    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
 	    .AddEnvironmentVariables() 
 	    .Build();
-
-        log.LogInformation("Processing lead");
-
-        // Method to process body from marketplace
-        string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        Lead deserializedMarketplaceLead = JsonConvert.DeserializeObject<Lead>(requestBody);
-	
+        
         // Hubspot API information
 	    string hubspotAPIKey = config["hubspotAPIKEY"];
-        string baseURI = "https://api.hubapi.com/crm/v3/objects/contacts?limit=10&archived=false&hapikey=";
+        string baseURI = "https://api.hubapi.com/contacts/v1/contact/?hapikey=";
         string URI = baseURI + hubspotAPIKey;
-        var details = new HubSpotContactPoperties();
 
+        // Process leads from the marketplace
+        string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+        Lead deserializedMarketplaceLead = JsonConvert.DeserializeObject<Lead>(requestBody);
+  
+    
         // You can use as much properties as you want, as long as they exist in HubSpot.
         // Do a HTTP get to https://api.hubapi.com/properties/v1/contacts/properties?hapikey=<APIKEY> to check
+        var details = new HubSpotContactPoperties();
         details.properties = new List<Property>
         {
             new Property { property = "firstname", value = deserializedMarketplaceLead.userDetails.firstName },
@@ -57,16 +57,12 @@ namespace evalan_hubspot
             new Property { property = "lead_source", value = "Microsoft.com Referral"},
             new Property { property = "message", value = "Offer Title: " + deserializedMarketplaceLead.offerTitle }
         };
-
-        string postBody = JsonConvert.SerializeObject(details);
-        //log.LogInformation(postBody);
-
+        // Serial details to jsonBody
+        string jsonBody = JsonConvert.SerializeObject(details);
 
 
-        // Debug
-        //log.LogInformation(URI);
-        
 
+        // Methods for HTTP Client, and posting to HubSpot
         // Create HTTP client
         static HttpClient HTTPClient()
         {
@@ -76,23 +72,24 @@ namespace evalan_hubspot
             return httpClient;
         }
 
-
         // Write contact to hubspot
-        static async Task<string> WriteLeadHubSpot(string URI, string postBody)
+        static async Task<string> WriteLeadHubSpot(string URI, string jsonBody)
         {
             HttpClient httpClient = HTTPClient();
-            HttpResponseMessage response = await httpClient.PostAsJsonAsync(URI, postBody);
+            StringContent postBody = new StringContent(jsonBody, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await httpClient.PostAsync(URI, postBody);
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
             return responseBody;
         }
 
-        string result = await WriteLeadHubSpot(URI, postBody);
-        log.LogInformation(result);
+        string result = await WriteLeadHubSpot(URI, jsonBody);
 
         // Marketplace can only deal with HTTP status codes. Message doesn't matter
         string responseMessage = "Function was triggered";
-
+        
+        // debug
+        log.LogInformation(result);
         return new OkObjectResult(responseMessage);
         }
     }
